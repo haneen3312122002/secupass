@@ -44,7 +44,7 @@ This separation keeps the codebase clean, testable, and scalable.
 
 ## ℹ️ Note About Project Timeline
 
-> This project was developed earlier (June 2025 – February 2025)  
+> This project was developed earlier (6/2025 – 8/2025)  
 > and uploaded to GitHub later for portfolio and documentation purposes.
 
 ---
