@@ -1,4 +1,3 @@
-// main_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -34,7 +33,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
     _loadThemePreference();
   }
 
-  // ✅ Method to load the theme preference
+  //  Method to load the theme preference
   Future<void> _loadThemePreference() async {
     final prefs = await SharedPreferences.getInstance();
 

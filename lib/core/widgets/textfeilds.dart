@@ -1,6 +1,29 @@
+/// A reusable form widget that collects the main account inputs:
+/// - App name
+/// - Username / Email
+/// - Password
+///
+/// UI behavior:
+/// - Supports light/dark mode styling by dynamically adjusting colors.
+/// - Password field includes a visibility toggle (show / hide).
+/// - Includes a "Check" button next to the password field to validate strength.
+/// - Displays a password strength bar and an optional warning message.
+///
+/// BLoC integration (CheckPassBloc):
+/// - This widget does not calculate password strength by itself.
+/// - When the user presses the check button, it dispatches:
+///   `checkPassStrengthEvent(widget.pass.text)`
+///   to `CheckPassBloc`.
+/// - The UI then reacts to the bloc state:
+///   - checkPassLoadingState: disables the button and shows a loading indicator.
+///   - checkPassLoadedState: shows PasswordStrengthBar (len + color) and warning text (if any).
+///   - checkPassErrorState: displays an error message.
+///
+/// This separation keeps the UI focused on rendering while the business logic
+/// (password strength checking) stays inside the BLoC.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secupass/core/widgets/buttom_navbar.dart';
 import 'package:secupass/features/pass_check/bloc/check_pass_bloc.dart';
 import 'package:secupass/features/pass_check/bloc/check_pass_event.dart';
 import 'package:secupass/features/pass_check/bloc/check_pass_state.dart';
@@ -8,7 +31,6 @@ import 'package:secupass/features/pass_check/screen/pass_check_bar.dart';
 import 'package:secupass/l10n/app_localizations.dart';
 
 // Import the AccountEntitiy class to be able to create an instance of it
-import 'package:secupass/features/home_screen/domain/entities/account_entity.dart';
 
 class MyFeilds extends StatefulWidget {
   final TextEditingController appname;
@@ -38,15 +60,11 @@ class _MyFeildsState extends State<MyFeilds> {
     final borderColor = isDarkMode ? Colors.grey[600] : Colors.grey;
     final focusedBorderColor = isDarkMode ? Colors.blue[300] : Colors.blue;
 
-    // ====================================================================
-    // 💡 تم نقل BlocProvider هنا
-    // سنستخدم BlocProvider.value لنوفر Bloc موجود مسبقًا بدلاً من إنشائه هنا
-    // ====================================================================
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        // 1. App Name Field
+        //  App Name Field
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: TextField(
@@ -87,7 +105,7 @@ class _MyFeildsState extends State<MyFeilds> {
         ),
         const SizedBox(height: 16.0),
 
-        // 2. Email/Username Field
+        //  Email/Username Field
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: TextField(
@@ -128,7 +146,7 @@ class _MyFeildsState extends State<MyFeilds> {
         ),
         const SizedBox(height: 16.0),
 
-        // 3. Password Field with Visibility Toggle and Check Button
+        //  Password Field with Visibility Toggle and Check Button
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row(
@@ -226,8 +244,7 @@ class _MyFeildsState extends State<MyFeilds> {
         ),
         const SizedBox(height: 16.0),
 
-        // 4. Password Strength Bar
-        // 4. Password Strength Bar + رسالة التحذير إذا وجدت
+        //  Password Strength Bar
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: BlocBuilder<CheckPassBloc, CheckPassState>(

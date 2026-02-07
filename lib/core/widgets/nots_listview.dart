@@ -1,7 +1,25 @@
+/// A reusable list widget for displaying app notifications
+/// in a card-based layout consistent with the rest of the UI.
+///
+/// What it does:
+/// - Displays a list of notifications using Card + ListTile.
+/// - Disables internal scrolling to allow usage inside a parent scroll view.
+/// - Adapts spacing and font sizes for small screens to ensure readability.
+/// - Shows notification title, body, and formatted date.
+///
+/// Localization:
+/// - Uses AppLocalizations for localized labels (e.g. notification date prefix).
+///
+/// Design:
+/// - Uses notification-specific colors and icons to visually distinguish
+///   notifications from other list items (e.g. accounts).
+///
+/// This widget is read-only and can be extended later to support
+/// navigation to a notification details screen.
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:secupass/features/home_screen/data/models/nots.dart'; // تأكد أن NotModel موجود في هذا المسار
-import 'package:secupass/features/home_screen/domain/entities/not_entity.dart'; // NotEntity is used for type hinting, NotModel for casting
 import 'package:secupass/l10n/app_localizations.dart'; // Import localization package
 
 class NotificationListView extends StatelessWidget {
@@ -16,10 +34,8 @@ class NotificationListView extends StatelessWidget {
     final language = AppLocalizations.of(context)!; // Get localization instance
 
     return ListView.builder(
-      // Since this ListView will be inside SingleChildScrollView in NotificationsPage,
-      // shrinkWrap and NeverScrollableScrollPhysics are important to prevent scroll conflicts.
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(), //no scrolling
       itemCount: notifications.length,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       itemBuilder: (context, index) {

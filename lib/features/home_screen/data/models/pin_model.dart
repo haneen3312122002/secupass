@@ -1,9 +1,8 @@
-// data/models/pin_model.dart
 import 'package:secupass/features/home_screen/domain/entities/pin_entity.dart';
 
 // PinModel
 class PinModel extends PinEntity {
-  PinModel({  int? id, required int pin}) : super(id: id, pin: pin);
+  PinModel({int? id, required int pin}) : super(id: id, pin: pin);
 
   factory PinModel.fromJson(Map<String, dynamic> json) {
     return PinModel(

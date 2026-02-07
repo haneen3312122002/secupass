@@ -1,10 +1,34 @@
+/// Displays all scheduled and saved notifications in the app.
+///
+/// Responsibilities:
+/// - Requests notification-related permissions on first load.
+/// - Loads notifications from local storage using `NotCubit`.
+/// - Displays notifications using `NotificationListView`.
+/// - Handles permission and loading errors gracefully.
+///
+/// Permission handling:
+/// - Requests general notification permission.
+/// - On Android, requests exact alarm permission to ensure
+///   precise scheduled notifications.
+/// - Shows a SnackBar with a direct link to app settings
+///   if permissions are denied.
+///
+/// State management (NotCubit):
+/// - NotLoading: shows a loading indicator.
+/// - NotLoaded: displays notifications or an empty state.
+/// - NotError: shows a user-friendly error message.
+///
+/// Localization:
+/// - All texts and messages are localized using AppLocalizations.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:secupass/core/widgets/nots_listview.dart'; // Ensure this widget exists
 import 'package:secupass/features/notefications_page/presentation/cubit/not_cubit.dart';
 import 'package:secupass/features/notefications_page/presentation/cubit/not_state.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:secupass/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});

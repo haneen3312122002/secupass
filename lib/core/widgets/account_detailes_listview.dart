@@ -1,3 +1,17 @@
+/// AccountDetailsView
+///
+/// This screen is responsible for displaying the full details of a saved account
+///  the functions:
+/// - Display the app name + username.
+/// - Decrypt the stored encrypted password once when the screen is initialized.
+/// - Allow the user to toggle password visibility (show / hide).
+/// - Handle decryption errors gracefully by showing an error message if needed.
+/// - Show data: such as last update date and automatically calculated next update date.
+///
+/// Security considerations:
+/// - The password is stored encrypted and only decrypted locally for display.
+/// - Password visibility is disabled by default and requires explicit user action.
+
 import 'package:flutter/material.dart';
 import 'package:secupass/encrypt_helper.dart'; // Import your encryption helper
 import 'package:secupass/features/home_screen/domain/entities/account_entity.dart';
@@ -19,14 +33,13 @@ class _AccountDetailsViewState extends State<AccountDetailsView> {
   @override
   void initState() {
     super.initState();
-    // Decrypt the password in initState and store it.
+    // Decrypt the password in initState and store it
     _decryptedPassword = EncryptionHelper.decrypt(widget.account.encPass);
   }
 
   @override
   Widget build(BuildContext context) {
     final language = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -84,12 +97,14 @@ class _AccountDetailsViewState extends State<AccountDetailsView> {
     );
   }
 
+//function to toggle password visibility (on / off)
   void _togglePasswordVisibility() {
     setState(() {
       _isPasswordVisible = !_isPasswordVisible;
     });
   }
 
+//build a row for each detail with an icon, label and value
   Widget _buildDetailRow(BuildContext context,
       {required String label, required String value, required IconData icon}) {
     final theme = Theme.of(context);
@@ -123,6 +138,7 @@ class _AccountDetailsViewState extends State<AccountDetailsView> {
     );
   }
 
+//password row with visibility toggle and error handling (if decryption fails)
   Widget _buildPasswordDetailRow(BuildContext context,
       {required String label,
       required String value,
@@ -173,6 +189,7 @@ class _AccountDetailsViewState extends State<AccountDetailsView> {
     );
   }
 
+//function to calculate the next update date based on the last update and selected days, returns 'N/A' if selected days is 0
   String _calculateNextUpdate(AccountEntitiy account) {
     if (account.selectedDays == 0) return 'N/A';
     final nextUpdate =

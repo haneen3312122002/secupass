@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secupass/features/account_detailes/presentation/cubit/delete_account_state.dart';
 import 'package:secupass/features/home_screen/domain/usecases/accoun/delete_usecase.dart';
 
+/// A Cubit responsible for handling the deletion of an account in the account details screen.
 class DeleteAccountCubit extends Cubit<DeleteAccountState> {
   DeleteAccountCubit(this.delete) : super(DeleteInitAccountState());
   final DeleteAccountUseCase delete;

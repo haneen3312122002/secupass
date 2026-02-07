@@ -3,6 +3,7 @@ import 'package:secupass/features/add_account_screen.dart/presentation/cubit/add
 import 'package:secupass/features/home_screen/domain/entities/account_entity.dart';
 import 'package:secupass/features/home_screen/domain/usecases/accoun/add_uecase.dart';
 
+/// A Cubit responsible for managing the state of adding a new account in the add account screen.
 class AddAccountsCubit extends Cubit<AddAccountsState> {
   AddAccountsCubit(this.addAccountUseCase) : super(InitState());
   final AddAccountUseCase addAccountUseCase;

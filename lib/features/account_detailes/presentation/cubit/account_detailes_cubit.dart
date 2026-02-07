@@ -1,9 +1,30 @@
-// features/account_detailes/presentation/cubit/account_detailes_cubit.dart
+/// A Cubit responsible for loading and managing the state of
+/// a single account details screen.
+///
+/// Responsibilities:
+/// - Requests account details by ID from the domain layer
+///   using `GetAccountDetailesUseCase`.
+/// - Emits loading, success, or error states based on the result.
+/// - Handles "account not found" and unexpected errors gracefully.
+///
+/// State flow:
+/// - AccountDetailesLoading:
+///   Emitted when the request starts.
+/// - AccountDetailesLoaded:
+///   Emitted when the account is successfully retrieved.
+/// - AccountDetailesError:
+///   Emitted when the account does not exist or an exception occurs.
+///
+/// Architecture:
+/// - Follows Clean Architecture principles.
+/// - Keeps business logic inside the domain layer (UseCase),
+///   while the Cubit only coordinates state changes for the UI.
+///
+/// This Cubit is used by the account details screen to reactively
+/// render loading indicators, data, or error messages.
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secupass/features/account_detailes/presentation/cubit/account_detailes_state.dart';
-// Remove the following import as AccountModel is a data layer concern, not domain/presentation here
-// import 'package:secupass/features/home_screen/data/models/account_model.dart';
-// import 'package:secupass/features/account_detailes/presentation/screens/account_detailes.dart'; // This import is still likely unnecessary
 import 'package:secupass/features/home_screen/domain/entities/account_entity.dart';
 import 'package:secupass/features/home_screen/domain/usecases/accoun/get_account_detailes.dart';
 
@@ -16,7 +37,7 @@ class AccountDetailesCubit extends Cubit<AccountDetailesState> {
   Future<void> loadAccountDetailes(int id) async {
     emit(AccountDetailesLoading());
     try {
-      // Correctly call the injected use case and expect an AccountEntitiy?
+      // get account details by id
       final AccountEntitiy? accountDetail = await getAccountDetailesUseCase(id);
 
       if (accountDetail != null) {

@@ -1,6 +1,24 @@
+///
+/// A reusable list widget that displays saved accounts in a clean card-based UI.
+/// functions:
+/// - Renders a  ListView
+/// - Shows each account as a Card + ListTile with:
+///   - App name
+///   - Last update date (formatted with Intl)
+///   - A leading avatar/logo loaded using `PhotoBloc`
+/// - Adapts spacing/font sizes for small screens to avoid overflow.
+///
+/// Navigation:
+/// - On tap, navigates to the account details screen using
+///   `PersistentNavBarNavigator.pushNewScreenWithRouteSettings`,
+///   and hides the bottom navigation bar for a full-screen details view.
+///
+/// Localization:
+/// - Uses AppLocalizations to display translated fallback texts like
+///   "Unknown app name" and "Unknown date".
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// Should import PersistentNavBarNavigator from this package
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:secupass/features/account_detailes/presentation/screens/account_detailes.dart';
 import 'package:secupass/features/home_screen/domain/entities/account_entity.dart'; // Ensure AccountEntitiy is imported
@@ -11,7 +29,6 @@ import 'package:secupass/image_fitch/screen/photo_screen.dart';
 import 'package:secupass/l10n/app_localizations.dart'; // Import localization package
 
 class CustomListView extends StatelessWidget {
-  // It's better to specify the list type more precisely, like List<AccountEntitiy>
   final List<dynamic> accounts;
 
   const CustomListView({super.key, required this.accounts});
@@ -23,11 +40,9 @@ class CustomListView extends StatelessWidget {
     final language = AppLocalizations.of(context)!; // Get localization instance
 
     return ListView.builder(
-      // Since this ListView will be inside SingleChildScrollView in HomePage,
-      // shrinkWrap and NeverScrollableScrollPhysics are important to prevent scroll conflicts.
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: accounts.length,
+      physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+      itemCount: accounts.length, //all accounts in the list
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       itemBuilder: (context, index) {
         final account = accounts[index]

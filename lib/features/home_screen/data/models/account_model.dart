@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:secupass/features/home_screen/domain/entities/account_entity.dart';
 
 class AccountModel extends AccountEntitiy {

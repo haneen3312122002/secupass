@@ -1,3 +1,28 @@
+/// The main landing screen of the application that displays
+/// all saved accounts.
+///
+/// Data flow (GetAccountsCubit):
+/// - On initState, the screen triggers `loadAccounts()` to fetch
+///   all stored accounts.
+/// - The UI reacts to cubit states:
+///   - LoadingAccounts: shows a loading indicator.
+///   - LoadedAccounts: displays the accounts list using `CustomListView`.
+///   - NoAccounts: shows an empty-state message.
+///   - ErrorAccounts: shows a localized error message.
+///
+/// UI behavior:
+/// - Uses `AnimatedAddButton` in the AppBar to navigate to
+///   the AddAccount screen.
+/// - Wraps the accounts list inside a `SingleChildScrollView`
+///   to support flexible layouts.
+/// - Displays friendly empty states when no data is available.
+///
+/// Localization:
+/// - All user-facing text is localized using `AppLocalizations`.
+///
+/// This screen acts as the entry point for managing accounts
+/// and provides quick access to adding new ones.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secupass/core/widgets/add_button.dart';
@@ -5,7 +30,6 @@ import 'package:secupass/core/widgets/listview.dart';
 import 'package:secupass/features/add_account_screen.dart/presentation/screens/add_account.dart';
 import 'package:secupass/features/home_screen/presentation/cubit/get_accounts_cubit.dart';
 import 'package:secupass/features/home_screen/presentation/cubit/get_accounts_state.dart';
-import 'package:secupass/image_fitch/bloc/photo_bloc.dart';
 import 'package:secupass/l10n/app_localizations.dart'; // Import localization package
 
 class HomePage extends StatefulWidget {
@@ -68,14 +92,6 @@ class _HomePageState extends State<HomePage> {
                 child: Text(language
                     .error_loading_accounts)); // Localized error message
           } else if (state is NoAccounts) {
-            // Assuming state.msg is already a localized message provided by the cubit,
-            // or you want to display it as is if it's dynamic from the backend.
-            // If it's a fixed phrase like "No accounts yet", then `language.no_accounts_found` is better.
-            // For robustness, if `state.msg` is not guaranteed to be localized,
-            // you might want to map specific `state.msg` values to localized keys.
-            // For now, I'll use `no_accounts_found` as a general empty state message.
-            // If `state.msg` is truly dynamic, keep it. But for a "no accounts" scenario,
-            // a pre-defined localized message is usually best.
             return Center(child: Text(language.no_accounts_found));
           }
           // Fallback for any unhandled state, ensuring a localized message

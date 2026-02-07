@@ -1,3 +1,13 @@
+/// A reusable animated Floating Action Button  that visually toggles
+/// Behavior:
+/// - Rotates the icon smoothly when pressed.
+/// - Switches the icon from + to × to indicate open/close state.
+/// - Triggers a callback on every tap to allow parent widgets to react
+/// Customization:
+/// - Supports custom size, background color, and icon color.
+/// - Designed to be lightweight and easily reusable across screens.
+///
+
 import 'package:flutter/material.dart';
 
 class AnimatedAddButton extends StatefulWidget {
@@ -20,6 +30,7 @@ class AnimatedAddButton extends StatefulWidget {
 
 class _AnimatedAddButtonState extends State<AnimatedAddButton>
     with SingleTickerProviderStateMixin {
+  // Animation controller and animation for rotating the icon
   late AnimationController _controller;
   late Animation<double> _rotationAnimation;
 
@@ -36,6 +47,7 @@ class _AnimatedAddButtonState extends State<AnimatedAddButton>
         .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
+// Handle button tap to toggle animation and call the provided onPressed callback
   void _handleTap() {
     if (_isOpened) {
       _controller.reverse();

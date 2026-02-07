@@ -1,9 +1,40 @@
+/// A screen responsible for creating and saving a new account securely.
+///
+/// Features:
+/// - Collects app name, username/email, and password using reusable input fields.
+/// - Integrates `CheckPassBloc` to evaluate password strength in real time.
+/// - Allows the user to select a reminder period (30 / 60 / 90 days) using GroupButton.
+/// - Encrypts the password before saving it locally.
+/// - Fetches an app logo/image automatically before finalizing the account creation.
+///
+/// Add flow (step-by-step):
+/// 1. User fills in all required fields (app name, username, password).
+/// 2. Password strength is checked using `CheckPassBloc`.
+/// 3. User selects reminder days via GroupButton.
+/// 4. Account data is temporarily stored in `pendingAccount` without an image.
+/// 5. `PhotoBloc` is triggered to fetch the app image.
+/// 6. Once the image is loaded:
+///    - The account is saved using `AddAccountsCubit`.
+///    - A notification is scheduled using `NotCubit`.
+///
+/// State management:
+/// - AddAccountsCubit:
+///   - AddingState: shows loading indicator and disables the button.
+///   - AddedState: navigates back to the main navigation screen.
+///   - ErrorState: navigates to a status screen with an error message.
+///
+/// Architecture notes:
+/// - Follows Clean Architecture principles.
+/// - UI handles input and rendering only.
+/// - Business logic (add, encrypt, notify) is handled by Cubits and helpers.
+///
+/// All user-facing text is fully localized.
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // For HapticFeedback
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:group_button/group_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:secupass/core/widgets/buttom_navbar.dart';
+import 'package:secupass/core/widgets/grouped_button.dart';
 import 'package:secupass/core/widgets/textfeilds.dart'; // MyFeilds is here
 import 'package:secupass/encrypt_helper.dart';
 import 'package:secupass/features/NavBar_page/presentation/screens/nav_bar.dart';
@@ -19,8 +50,6 @@ import 'package:secupass/l10n/app_localizations.dart';
 
 // Import the CheckPassBloc and its dependencies
 import 'package:secupass/features/pass_check/bloc/check_pass_bloc.dart';
-import 'package:secupass/features/pass_check/bloc/check_pass_state.dart';
-import 'package:secupass/features/pass_check/bloc/check_pass_event.dart';
 
 class AddAccount extends StatefulWidget {
   const AddAccount({super.key});
@@ -34,8 +63,7 @@ class _AddAccountState extends State<AddAccount> {
   final TextEditingController appName = TextEditingController();
   final TextEditingController password = TextEditingController();
   final TextEditingController userName = TextEditingController();
-
-  // متغير مؤقت لتخزين الحساب قبل تحميل الصورة
+// Temporary variable to hold the account data before adding the photo
   AccountEntitiy? pendingAccount;
 
   @override

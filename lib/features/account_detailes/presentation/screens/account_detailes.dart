@@ -1,3 +1,35 @@
+/// A details screen that displays a single account information by its ID,
+/// and provides update + delete actions.
+///
+/// Data flow (AccountDetailesCubit):
+/// - On initState, the screen triggers `loadAccountDetailes(accountId)`
+///   to fetch the account from the domain layer.
+/// - UI reacts to cubit states:
+///   - AccountDetailesLoading: shows a loading spinner.
+///   - AccountDetailesLoaded: renders `AccountDetailsView` with the loaded account.
+///   - AccountDetailesError: shows a localized error message.
+///   - Fallback: shows "no details available".
+///
+/// Update flow:
+/// - The update button is only shown when the account is loaded.
+/// - Navigates to UpdateAccount screen using `MultiBlocProvider`:
+///   - UpdateAccountCubit: handles update logic.
+///   - CheckPassBloc: checks password strength during editing.
+/// - After returning from the update screen, it reloads the details to reflect changes.
+///
+/// Delete flow (DeleteAccountCubit):
+/// - Shows a confirmation dialog to prevent accidental deletion.
+/// - When confirmed, triggers `DeleteAccount(accountId)`.
+/// - UI reacts to delete states:
+///   - DeletingAccountState: disables the button and shows a progress indicator.
+///   - DeletedAccountState: navigates back to the main navigation screen.
+///   - DeleteAccountErrorState: opens a StatusPage with an error message.
+///
+/// UI notes:
+/// - Uses `SingleChildScrollView` + `ConstrainedBox` to keep layout stable on
+///   different screen sizes.
+/// - Uses localization for all user-facing text.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -14,7 +46,6 @@ import 'package:secupass/features/update_account/presentation/cubit/update_accou
 import 'package:secupass/features/home_screen/domain/usecases/accoun/update_usecase.dart';
 import 'package:secupass/features/update_account/presentation/screens/update_account_screen.dart';
 import 'package:secupass/l10n/app_localizations.dart';
-import 'package:gohashlogin/gohashlogin.dart';
 
 class AccountDetailes extends StatefulWidget {
   final int accountId;
@@ -27,6 +58,7 @@ class AccountDetailes extends StatefulWidget {
 
 class _AccountDetailesState extends State<AccountDetailes> {
   @override
+  // Load account details when the widget is initialized
   void initState() {
     super.initState();
     Future.microtask(() {

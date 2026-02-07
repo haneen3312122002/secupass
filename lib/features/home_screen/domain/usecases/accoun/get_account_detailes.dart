@@ -1,4 +1,3 @@
-// features/home_screen/domain/usecases/get_account_detailes.dart
 import 'package:secupass/features/home_screen/domain/entities/account_entity.dart';
 import 'package:secupass/features/home_screen/domain/reps/account_rep.dart';
 

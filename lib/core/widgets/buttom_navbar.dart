@@ -1,3 +1,12 @@
+/// consistent styling and animation across the app.
+///
+/// Features:
+/// - Applies unified padding, height, and border radius.
+/// - Supports animated press feedback.
+/// - Allows flexible width based on screen size or layout needs.
+/// - Accepts a custom child widget.
+///
+
 import 'package:flutter/material.dart';
 import 'package:custom_button_builder/custom_button_builder.dart';
 
@@ -19,7 +28,7 @@ class MyCustomButton extends StatelessWidget {
         animate: true,
         backgroundColor: color,
         borderRadius: 30,
-        width: width, // يتغير حسب الشاشة
+        width: width, // bassed on screen width
         height: 48,
         child: child,
       ),

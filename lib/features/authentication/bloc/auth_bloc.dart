@@ -21,21 +21,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthLoadingState());
     });
 
-    // Corrected handler:
-    // في ملف auth_bloc.dart
-
+//the first event that will be called when the app run for the first time to check if it's the first time or not and if there is a pin already or not:
     on<AuthFirstAppRunEvent>((event, emit) async {
-      final isFirst = await isFirstRun();
       final isPinAlreadySet = await verifyPin.isPinSet(); // دالة جديدة
 
       if (!isPinAlreadySet) {
         emit(AuthFirstAppRunState()); // أظهر شاشة إضافة PIN
       } else {
-        // إذا لم تكن المرة الأولى أو كان هناك PIN موجود، اطلب من المستخدم إدخاله
+        // pin is already set, so we go to the input pin screen
         emit(AuthInputPinState());
       }
     });
-
+//when the user enter the pin and click on the button to verify it:
     on<AuthenticatedEvent>((event, emit) {
       emit(AuthenticatedState(message: event.msg));
     });
@@ -64,6 +61,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthenticationErrorState(error: e.toString()));
       }
     });
+    //verify the pin:
     on<AuthVerifyPinEvent>(_onVerifyPin);
   }
   //......................................
@@ -71,8 +69,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthVerifyPinEvent event, Emitter<AuthState> emit) async {
     final prefs = await SharedPreferences.getInstance();
     final now = DateTime.now().millisecondsSinceEpoch;
-
-    // تحقق إذا لسه محجوب
+// Check if the user is currently blocked due to too many failed attempts
     final blockUntil = prefs.getInt('block_until') ?? 0;
     if (now < blockUntil) {
       final remaining = ((blockUntil - now) / 1000).ceil();

@@ -1,3 +1,44 @@
+/// UpdateAccount
+///
+/// Screen responsible for editing an existing account and saving changes.
+///
+/// What this screen does:
+/// - Pre-fills inputs (app name, username, password) with the current account data.
+/// - Decrypts the stored encrypted password only for editing purposes.
+/// - Re-checks password strength while the user types (using `CheckPassBloc`).
+/// - Allows changing the reminder period (days) using `GroupButton`
+///   and stores the selected value in `UpdateAccountCubit`.
+///
+/// Password strength (CheckPassBloc):
+/// - Each time the password changes, an event is dispatched:
+///   `checkPassStrengthEvent(password.text)`
+/// - UI reacts to the bloc state:
+///   - Loading: shows progress indicator
+///   - Loaded: shows a strength bar + optional warning
+///   - Error: shows an error message
+///
+/// Reminder days selector (GroupButton):
+/// - Works as a radio group (single selection).
+/// - Selected value comes from `UpdateAccountState.updatedSelectedDays`.
+/// - On selection, calls `changeSelectedDays(val)` to update the cubit state.
+///
+/// Save/update logic:
+/// - The Update button is enabled only if something changed:
+///   app name / username / password / selected days.
+/// - Password is encrypted before saving.
+/// - If password changed, `lastUpdate` is refreshed to DateTime.now()
+///   otherwise it keeps the old lastUpdate.
+/// - Triggers `PhotoBloc` to update the app image/logo based on app name.
+/// - Updates the related notification via `NotCubit.updateNot()`.
+///
+/// State management (UpdateAccountCubit):
+/// - UpdateAccountSaving: disables button and shows loader.
+/// - UpdateAccountSaved: navigates to success StatusPage.
+/// - UpdateAccountError: navigates to error StatusPage.
+///
+/// Localization:
+/// - All visible text uses AppLocalizations.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_button/group_button.dart';

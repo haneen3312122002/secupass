@@ -7,7 +7,6 @@ import 'package:secupass/features/home_screen/domain/usecases/nots/update_nots.d
 import 'package:secupass/features/notefications_page/presentation/cubit/not_state.dart';
 import 'package:timezone/data/latest.dart' as tzData;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:permission_handler/permission_handler.dart';
 
 class NotCubit extends Cubit<NotState> {
   final FlutterLocalNotificationsPlugin plugin;
@@ -21,8 +20,7 @@ class NotCubit extends Cubit<NotState> {
     tzData.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Amman'));
   }
-
-  // دالة خاصة لجدولة الإشعارات
+// Method to schedule a notification with proper permission handling
   Future<void> _scheduleNotification({
     required int? id,
     required String title,
@@ -196,6 +194,5 @@ class NotCubit extends Cubit<NotState> {
   // إذا كنت تريد حذف إشعارات، قد تحتاج لـ clear notifications
   Future<void> clearAllNotifications() async {
     await plugin.cancelAll();
-    // يمكنك إضافة منطق لحذفها من قاعدة البيانات هنا أيضاً
   }
 }
